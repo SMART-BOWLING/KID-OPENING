@@ -10,8 +10,6 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://apis.google.com/js/api.js"></script>
   <style>
-    /* Стили остаю
-    тся без изменений, только меняем названия */
     * {
       margin: 0;
       padding: 0;
@@ -64,7 +62,7 @@
       --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
       --cell-height: 58px;
       --cell-width: 74px;
-      --lane-width: 140px;
+      --lane-width: 220px; /* Увеличил ширину для названий станций */
     }
 
     body {
@@ -385,7 +383,7 @@
       border-collapse: collapse;
       table-layout: fixed;
       width: 100%;
-      min-width: 1150px;
+      min-width: 1200px;
       font-size: 14px;
     }
     
@@ -402,6 +400,8 @@
     
     #tableDesktop thead th.corner {
       width: var(--lane-width);
+      min-width: var(--lane-width);
+      max-width: var(--lane-width);
       position: sticky;
       left: 0;
       z-index: 5;
@@ -409,11 +409,13 @@
       font-weight: 620;
       color: var(--label-dark);
       background: #efefef;
+      text-align: center;
     }
     
     #tableDesktop thead th.th-time { 
       cursor: pointer; 
       width: var(--cell-width); 
+      min-width: var(--cell-width);
     }
     
     #tableDesktop tbody tr { 
@@ -422,6 +424,8 @@
     
     #tableDesktop tbody td.lane-hdr {
       width: var(--lane-width);
+      min-width: var(--lane-width);
+      max-width: var(--lane-width);
       font-size: 15px;
       font-weight: 600;
       border-bottom: 0.5px solid var(--border-strong);
@@ -435,7 +439,8 @@
       align-items: center;
       gap: 10px;
       min-height: var(--cell-height);
-      background: #f8f8f8;
+      background: #e8edf2; /* Светло-синий фон для всех станций */
+      border-left: 3px solid var(--accent-blue);
     }
     
     .lane-hdr .station-logo {
@@ -448,14 +453,13 @@
     
     .lane-hdr .station-name {
       font-weight: 600;
+      font-size: 14px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
     }
-    
-    .lane-hdr.group-blue { background: #d4e4ee; border-left: 3px solid #2c5f7a; }
-    .lane-hdr.group-green { background: #d9e8d9; border-left: 3px solid #4f6b4e; }
-    .lane-hdr.group-red { background: #ebd6d6; border-left: 3px solid #9b4b4b; }
     
     #tableDesktop tbody td.slot {
       background: #ffffff;
@@ -540,20 +544,10 @@
     }
     
     .slider[data-lane-type="blue"] { background: rgba(44, 95, 122, 0.92); color: white; }
-    .slider[data-lane-type="green"] { background: rgba(79, 107, 78, 0.92); color: white; }
-    .slider[data-lane-type="red"] { background: rgba(155, 75, 75, 0.92); color: white; }
     .slider.pending[data-lane-type="blue"] { background: rgba(44, 95, 122, 0.92); }
-    .slider.pending[data-lane-type="green"] { background: rgba(79, 107, 78, 0.92); }
-    .slider.pending[data-lane-type="red"] { background: rgba(155, 75, 75, 0.92); }
     .slider.confirmed[data-lane-type="blue"] { background: #2c5f7a; }
-    .slider.confirmed[data-lane-type="green"] { background: #4f6b4e; }
-    .slider.confirmed[data-lane-type="red"] { background: #9b4b4b; }
     .slider.rejected[data-lane-type="blue"] { background: rgba(44, 95, 122, 0.55); opacity: 0.85; }
-    .slider.rejected[data-lane-type="green"] { background: rgba(79, 107, 78, 0.55); }
-    .slider.rejected[data-lane-type="red"] { background: rgba(155, 75, 75, 0.55); }
     .slider.temp[data-lane-type="blue"] { background: rgba(44, 95, 122, 0.75); border: 1px solid #c9b16b; }
-    .slider.temp[data-lane-type="green"] { background: rgba(79, 107, 78, 0.75); border: 1px solid #c9b16b; }
-    .slider.temp[data-lane-type="red"] { background: rgba(155, 75, 75, 0.75); border: 1px solid #c9b16b; }
     
     .guest-status-dot {
       position: absolute;
@@ -732,31 +726,6 @@
       color: var(--label-secondary);
     }
     
-    /* Обновляем стили для заголовков станций в таблице */
-    #tableDesktop tbody td.lane-hdr {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 12px;
-      min-height: var(--cell-height);
-      background: #f8f8f8;
-    }
-    
-    #tableDesktop tbody td.lane-hdr .station-logo {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-    
-    #tableDesktop tbody td.lane-hdr .station-name {
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
     @media (max-width: 780px) {
       .page { padding: 18px 16px 70px; }
       .ctrl { flex-direction: column; align-items: stretch; }
@@ -769,8 +738,9 @@
       .site-logo { width: 28px; height: 28px; }
       .lane-hdr .station-logo { width: 24px; height: 24px; }
       .lane-hdr .station-name { font-size: 13px; }
-      #tableDesktop thead th.corner { width: 110px; }
-      #tableDesktop tbody td.lane-hdr { width: 110px; }
+      #tableDesktop thead th.corner { width: 160px; min-width: 160px; }
+      #tableDesktop tbody td.lane-hdr { width: 160px; min-width: 160px; }
+      :root { --lane-width: 160px; }
     }
   </style>
 </head>
@@ -884,7 +854,7 @@
   const SESSION_DURATION_DAYS = 1;
   
   let currentUser = null;
-  let stations = []; // Массив станций с логотипами
+  let stations = [];
   
   // ==================== JSONP ФУНКЦИИ ====================
   
@@ -1302,7 +1272,6 @@
   
   // ==================== ОСНОВНАЯ ЛОГИКА ====================
   
-  // Загружаем станции с логотипами
   async function loadStations() {
     try {
       const url = `${GAS_URL}?action=getStations&_=${Date.now()}`;
@@ -1322,24 +1291,15 @@
     }
   }
   
-  const SH = 10, EH = 22; // Начало и конец рабочего дня
+  const SH = 10, EH = 22;
   const slots = []; 
   for(let h=SH; h<=EH; h++) { 
     slots.push({ label: `${h}:00`, key: h, hour: h, minute: 0 }); 
     if(h<EH) slots.push({ label: `${h}:30`, key: h+0.5, hour: h, minute: 30 }); 
   }
   
-  function getGroupIndex(lane) { 
-    // Группировка станций для цветов
-    if (stations.length === 0) return 0;
-    // Простое распределение по группам
-    let n = lane + 1;
-    if (n <= Math.ceil(stations.length / 3)) return 0;
-    if (n <= Math.ceil(stations.length * 2 / 3)) return 1;
-    return 2;
-  }
-  const GRP_CLASS = ['group-blue', 'group-green', 'group-red'];
-  const LANE_TYPE_MAP = ['blue', 'green', 'red'];
+  // Простая группировка - все станции синие
+  const LANE_TYPE_MAP = ['blue', 'blue', 'blue']; // Все синие
   
   let bookings = [], tempBookings = [], nextTempId = 1;
   let dragModeEnabled = false;
@@ -1384,7 +1344,6 @@
   
   function buildDesktopTable(){
     let headRow = document.querySelector("#dtHead tr");
-    // Добавляем заголовки времени
     slots.forEach(sl=>{ 
       let th=document.createElement("th"); 
       th.className="th-time"; 
@@ -1393,28 +1352,26 @@
     });
     
     let body=$("dtBody");
-    // Определяем количество станций
     const numStations = stations.length > 0 ? stations.length : 12;
     
     for(let lane=0; lane<numStations; lane++){
       let tr=document.createElement("tr"); 
       tr.dataset.lane=lane;
       
-      let group=getGroupIndex(lane);
       let lhdr=document.createElement("td"); 
-      lhdr.className=`lane-hdr ${GRP_CLASS[group]}`;
+      lhdr.className="lane-hdr";
       
-      // Получаем данные станции
       let station = stations[lane] || { name: `Станция ${lane+1}`, logo: '' };
       let stationName = station.name || `Станция ${lane+1}`;
       let stationLogo = station.logo || '';
       
-      // Создаем контейнер для логотипа и названия
       let logoImg = document.createElement('img');
       logoImg.className = 'station-logo';
       logoImg.src = stationLogo || 'https://via.placeholder.com/32/cccccc/ffffff?text=?';
       logoImg.alt = stationName;
-      logoImg.onerror = function() { this.src = 'https://via.placeholder.com/32/cccccc/ffffff?text=?'; };
+      logoImg.onerror = function() { 
+        this.src = 'https://via.placeholder.com/32/cccccc/ffffff?text=?'; 
+      };
       
       let nameSpan = document.createElement('span');
       nameSpan.className = 'station-name';
@@ -1424,7 +1381,6 @@
       lhdr.appendChild(nameSpan);
       tr.appendChild(lhdr);
       
-      // Добавляем ячейки времени
       slots.forEach((sl,si)=>{ 
         let td=document.createElement("td"); 
         td.className="slot"; 
@@ -1489,7 +1445,7 @@
       let card=document.createElement("div"); 
       card.className="temp-card-inline"; 
       let timeStr = fmtFromSlotIdx(tb.startSlotIdx, tb.endSlotIdx);
-      let stationName = stations[tb.lane]?.name || `Стол ${tb.lane+1}`;
+      let stationName = stations[tb.lane]?.name || `Станция ${tb.lane+1}`;
       card.innerHTML=`<strong>${stationName}</strong><span class="temp-time">${timeStr}</span><button class="temp-rm" data-idx="${idx}"><i class="fas fa-times"></i></button>`; 
       card.querySelector(".temp-rm").onclick=()=>{ 
         tempBookings.splice(idx,1); 
@@ -1507,7 +1463,7 @@
     const span=document.getElementById("previewTimes"); 
     if(span) span.innerText = tempBookings.length ? tempBookings.map(tb=>{
       let timeStr = fmtFromSlotIdx(tb.startSlotIdx, tb.endSlotIdx);
-      let stationName = stations[tb.lane]?.name || `Стол ${tb.lane+1}`;
+      let stationName = stations[tb.lane]?.name || `Станция ${tb.lane+1}`;
       return `${stationName} (${timeStr})`;
     }).join("; ") : "—"; 
   }
@@ -1704,7 +1660,7 @@
       if(!sc||!ec) return; 
       let left=sc.offsetLeft+1, top=row.offsetTop+1, width=(ec.offsetLeft+ec.offsetWidth)-sc.offsetLeft-2, height=row.offsetHeight-2; 
       let status=item.isTemp?"temp":(item.confirmed===true?"confirmed":(item.confirmed===false?"rejected":"pending")); 
-      let laneType=LANE_TYPE_MAP[getGroupIndex(item.lane)]; 
+      let laneType='blue'; // Всегда синий
       let slider=document.createElement("div"); 
       slider.className=`slider ${status}`; 
       if(dragModeEnabled) slider.classList.add("drag-mode-enabled"); 
@@ -1886,7 +1842,6 @@
   // ==================== ИНИЦИАЛИЗАЦИЯ ====================
   
   async function initApplication() {
-    // Загружаем станции перед инициализацией
     await loadStations();
     
     document.addEventListener('dragstart', (e) => {
@@ -1964,7 +1919,6 @@
     });
   }
   
-  // ==================== ЗАГРУЗКА СТРАНИЦЫ ====================
   window.addEventListener('load', function() {
     const cachedUser = getCachedUser();
     if (cachedUser && cachedUser.email) {
